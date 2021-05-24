@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - NetConstruct Blog</title>
+    <link rel="stylesheet" type="text/css" href="/Assets/Styles/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/Assets/Styles/custom.css" />
+    <script src="/Assets/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="/Assets/Scripts/jquery.validate.min.js"></script>
+    <script src="/Assets/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="/Assets/Scripts/unobtrusive-bootstrap.js"></script>
+    <script src="/Assets/Scripts/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">NetConstruct Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">
+                            Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>

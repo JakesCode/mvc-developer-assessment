@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Index";
+    NetC.JuniorDeveloperExam.Web.Models.BlogPostCollection blogPostCollection = NetC.JuniorDeveloperExam.Web.Controllers.BlogController.GetBlogPostCollection(Server);
+}
+
+@if (blogPostCollection.blogPosts.Count > 0)
+{
+    <div class="d-flex m-2 col-12 flex-wrap">
+        @foreach (NetC.JuniorDeveloperExam.Web.Models.BlogPost blogPost in blogPostCollection.blogPosts)
+        {
+            <div class="p-2 col-6">
+                <div class="card">
+                    <img class="card-img-top" src="@blogPost.image" alt="@blogPost.title">
+                    <div class="card-body">
+                        <h5 class="card-title">@blogPost.title</h5>
+                        <p class="card-text">@blogPost.date.ToShortDateString() - @blogPost.date.ToShortTimeString()</p>
+                        <a href="blog/@blogPost.id" class="btn btn-primary">Read</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h1>There are no blog posts to display.</h1>
+}

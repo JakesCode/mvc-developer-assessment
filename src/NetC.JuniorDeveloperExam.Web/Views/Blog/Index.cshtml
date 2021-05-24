@@ -1,0 +1,109 @@
+﻿@model NetC.JuniorDeveloperExam.Web.Models.BlogPost
+@{
+    ViewBag.Title = Model != null ? Model.title : "Post Not Found";
+    
+}
+
+<!-- Blog post content -->
+<div class="col-lg-12">
+
+    @if (Model == null)
+    {
+        <div class="mx-auto d-flex flex-column text-center">
+            <h1>Can't find this Blogpost.</h1>
+            <a href="/">Back to Home</a>
+        </div>
+    }
+    else
+    {
+        <!-- Title -->
+        <h1 class="mt-4">@Model.title</h1>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p>Posted on @Model.date.ToLongDateString() - @Model.date.ToShortTimeString()</p>
+
+        <hr>
+
+        <!-- Preview Image -->
+        <img class="img-fluid rounded" src="@Model.image" alt="@Model.title">
+
+        <hr>
+
+        <!-- Post Content -->
+        @Html.Raw(Model.htmlContent)
+
+        <hr>
+
+        <!-- Blog post comment form -->
+        <div class="card my-4" id="commentForm">
+            <h5 class="card-header">Leave a Comment:</h5>
+            <div class="card-body">
+                <form method="post" action="/Blog/AddComment">
+                    <input type="hidden" name="id" value="@Model.id" />
+                    @Html.Partial("CommentForm", new NetC.JuniorDeveloperExam.Web.Models.Comment())
+                </form>
+            </div>
+        </div>
+
+        <!-- Blog post comments -->
+        foreach (NetC.JuniorDeveloperExam.Web.Models.Comment comment in Model.comments)
+        {
+            int index = Model.comments.IndexOf(comment);
+            <div class="media mb-4" id="@index">
+                <img class="d-flex mr-3 rounded-circle user-avatar" src="https://eu.ui-avatars.com/api/?name=@comment.name.Replace(" ", "+")" alt="@comment.name">
+                <div class="media-body">
+                    <h5 class="mt-0">@comment.name <small><em>(@comment.date.ToLongDateString() - @comment.date.ToShortTimeString())</em></small></h5>
+                    @comment.message
+                    <br />
+                    <a data-id="@index" class="btn btn-dark text-light replyButton">Reply</a>
+                </div>
+            </div>
+
+            foreach (NetC.JuniorDeveloperExam.Web.Models.Comment reply in comment.replies)
+            {
+                <div class="media mb-4 ml-5">
+                    <img class="d-flex mr-3 rounded-circle user-avatar" src="https://eu.ui-avatars.com/api/?name=@reply.name.Replace(" ", "+")" alt="@reply.name">
+                    <div class="media-body">
+                        <h5 class="mt-0">@reply.name <small><em>(@reply.date.ToLongDateString() - @reply.date.ToShortTimeString())</em></small></h5>
+                        @reply.message
+                        <br />
+                    </div>
+                </div>
+            }
+        }
+
+        if (Model.comments.Count == 0)
+        {
+            <p class="text-muted font-weight-bold">No comments have been posted yet....</p>
+        }
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on("click", "a.replyButton", function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            ev.stopImmediatePropagation();
+
+            $("#commentClone").empty();
+            let id = $(this).data("id");
+            console.log(id);
+            if (id < 0) {
+                // This is a 'cancel' button //
+                $("#replyingToDiv").hide();
+                $("#replyingTo").val(-1);
+            } else {
+                // This is a 'reply' button //
+                $("#replyingToDiv").show();
+                $("#replyingTo").val(id);
+                let commentClone = $("div.media#" + id).clone(true, false);
+                $(commentClone).find("a").removeClass("btn-dark").addClass("btn-light text-dark").text("Cancel").attr("data-id", -1);
+                commentClone.appendTo($("#commentClone"));
+                document.getElementById("commentForm").scrollIntoView({ behavior: "smooth" })
+            }
+        });
+    })
+</script>
